@@ -1,0 +1,53 @@
+def create_board(n, m):
+    return [['*' for _ in range(m)] for _ in range(n)]
+
+def print_board(board):
+    for row in board:
+        print(' '.join(row))
+
+def place_treasure(board, n, m):
+    while True:
+        try:
+            x = int(input(f"Entrez le numéro de ligne (0 à {n-1}) pour cacher le trésor : "))
+            y = int(input(f"Entrez le numéro de colonne (0 à {m-1}) pour cacher le trésor : "))
+            if 0 <= x < n and 0 <= y < m:
+                board[x][y] = 'T'
+                break
+            else:
+                print("Emplacement invalide, réessayez.")
+        except ValueError:
+            print("Veuillez entrer des numéros valides.")
+
+def place_trap(board, n, m):
+    while True:
+        x, y = random.randint(0, n-1), random.randint(0, m-1)
+        if board[x][y] == '*':
+            board[x][y] = 'X'
+            break
+
+def treasure_hunt_game():
+    n = int(input("Entrez le nombre de lignes du plateau : "))
+    m = int(input("Entrez le nombre de colonnes du plateau : "))
+    board = create_board(n, m)
+    
+    place_treasure(board, n, m)
+    place_trap(board, n, m)
+    
+    print_board(board)
+    
+    while True:
+        try:
+            guess_x = int(input(f"Devinez le numéro de ligne (0 à {n-1}) : "))
+            guess_y = int(input(f"Devinez le numéro de colonne (0 à {m-1}) : "))
+            if board[guess_x][guess_y] == 'T':
+                print("Félicitations ! Vous avez trouvé le trésor !")
+                break
+            elif board[guess_x][guess_y] == 'X':
+                print("Oh non ! Vous êtes tombé dans un piège.")
+                break
+            else:
+                print("Pas de trésor ici. Essayez à nouveau.")
+        except ValueError:
+            print("Veuillez entrer des numéros valides.")
+        except IndexError:
+            print("Emplacement hors du plateau. Réessayez.")
